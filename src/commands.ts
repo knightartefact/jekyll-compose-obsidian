@@ -134,15 +134,15 @@ export class JekyllComposeCommands {
 
         await this.ensureFolderExists(folderPath);
 
-        const newFileName = moment().format("YYYY-MM-DD") + `-${file.name}`;
-        const newFilePath = normalizePath(`${folderPath}/${newFileName}`);
-        if (await this.app.vault.adapter.exists(newFilePath)) {
+        const postFileName = moment().format("YYYY-MM-DD") + `-${file.name}`;
+        const postFilePath = normalizePath(`${folderPath}/${postFileName}`);
+        if (await this.app.vault.adapter.exists(postFilePath)) {
             throw new Error(
-                `A post with the name "${newFileName}" already exists`
+                `A post with the name "${postFileName}" already exists`
             );
         }
 
-        await this.app.vault.rename(file, newFilePath);
+        await this.app.vault.rename(file, postFilePath);
     }
 
     private async unpublishJekyllPost(
