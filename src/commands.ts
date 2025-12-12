@@ -18,6 +18,8 @@ export class JekyllComposeCommands {
                     (title: string) => {
                         this.createJekyllFile(title, plugin.settings.draftsFolder).then(() => {
                             new Notice(`Draft "${title}" created`);
+                        }).catch((error) => {
+                            new Notice(`Error creating draft: ${error.message}`);
                         });
                     }
                 ).open();
@@ -33,17 +35,11 @@ export class JekyllComposeCommands {
         await this.ensureFolderExists(folderPath);
 
         if (await this.app.vault.adapter.exists(filepath)) {
-            new Notice(`File "${formattedTitle}" already exists`);
-            return;
+            throw new Error(`"${formattedTitle}" already exists`);
         }
         // For later render template of the file for the front matter
-
-        try {
-            const file = await this.app.vault.create(filepath, "");
-            await this.app.workspace.getLeaf(false).openFile(file);
-        } catch (error) {
-            new Notice(`Error creating file: ${error}`);
-        }
+        const file = await this.app.vault.create(filepath, "");
+        await this.app.workspace.getLeaf(false).openFile(file);
     }
 
     private async ensureFolderExists(path: string) {
