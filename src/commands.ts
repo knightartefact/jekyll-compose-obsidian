@@ -62,6 +62,24 @@ export class JekyllComposeCommands {
                 ).open();
             },
         });
+
+        plugin.addCommand({
+            id: "unpublish-jekyll-post",
+            name: "Unpublish post",
+            callback: () => {
+                new FileSelectionModal(
+                    plugin.app,
+                    plugin.settings.postsFolder,
+                    (file: TFile) => {
+                        this.unpublishJekyllPost(file, plugin.settings.draftsFolder).then(() => {
+                            new Notice(`Post "${file.basename}" has been unpublished`);
+                        }).catch((error) => {
+                            new Notice(`Error unpublishing post: ${error.message}`);
+                        });
+                    }
+                ).open();
+            },
+        });
     }
 
     private async createJekyllDraft(
@@ -125,5 +143,24 @@ export class JekyllComposeCommands {
         }
 
         await this.app.vault.rename(file, newFilePath);
+    }
+
+    private async unpublishJekyllPost(
+        file: TFile,
+        folder: string
+    ): Promise<void> {
+        const folderPath = normalizePath(folder);
+
+        await this.ensureFolderExists(folderPath);
+
+        const draftFileName = file.name.replace(/^\d{4}-\d{2}-\d{2}-/, "");
+        const draftFilePath = normalizePath(`${folderPath}/${draftFileName}`);
+
+        if (await this.app.vault.adapter.exists(draftFilePath)) {
+            throw new Error(
+                `Draft "${draftFileName}" already exists`
+            );
+        }
+        await this.app.vault.rename(file, draftFilePath);
     }
 }
