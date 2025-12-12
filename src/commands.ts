@@ -114,6 +114,10 @@ export class JekyllComposeCommands {
         // For later render template of the file for the front matter
         const file = await this.app.vault.create(filepath, "");
         await this.app.workspace.getLeaf(false).openFile(file);
+        await this.app.fileManager.processFrontMatter(file, (frontMatter) => {
+                frontMatter.title = title.trim();
+                frontMatter.date = moment().format("YYYY-MM-DD HH:mm ZZ");
+        });
         return file;
     }
 
