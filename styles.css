@@ -6,3 +6,13 @@ available in the app when your plugin is enabled.
 If your plugin does not need CSS, delete this file.
 
 */
+
+.modal-suggestion-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-suggestion-hotkey {
+    color: var(--text-accent);
+}
