@@ -1,6 +1,6 @@
 import { App, normalizePath, Notice, TFile, moment } from "obsidian";
 import JekyllComposePlugin from "./main";
-import { UserInputModal } from "./modals";
+import { FileSelectionModal, UserInputModal } from "./modals";
 import * as changeCase from "change-case";
 
 export class JekyllComposeCommands {
@@ -44,19 +44,46 @@ export class JekyllComposeCommands {
                 ).open();
             },
         });
+
+        plugin.addCommand({
+            id: "publish-jekyll-draft",
+            name: "Publish draft",
+            callback: () => {
+                new FileSelectionModal(
+                    plugin.app,
+                    plugin.settings.draftsFolder,
+                    (file: TFile) => {
+                        this.publishJekyllDraft(file, plugin.settings.postsFolder).then(() => {
+                            new Notice(`Draft "${file.basename}" has been published`);
+                        }).catch((error) => {
+                            new Notice(`Error publishing draft: ${error.message}`);
+                        });
+                    }
+                ).open();
+            },
+        });
     }
 
-    private async createJekyllDraft(title: string, folder: string): Promise<void> {
+    private async createJekyllDraft(
+        title: string,
+        folder: string
+    ): Promise<void> {
         const file = await this.createJekyllFile(title, folder);
     }
 
-    private async createJekyllPost(title: string, folder: string): Promise<void> {
+    private async createJekyllPost(
+        title: string,
+        folder: string
+    ): Promise<void> {
         const file = await this.createJekyllFile(title, folder);
         file.basename = moment().format("YYYY-MM-DD") + `-${file.name}`;
         this.app.fileManager.renameFile(file, `${folder}/${file.basename}`);
     }
 
-    private async createJekyllFile(title: string, folder: string): Promise<TFile> {
+    private async createJekyllFile(
+        title: string,
+        folder: string
+    ): Promise<TFile> {
         const formattedTitle = changeCase.kebabCase(title.trim());
         const folderPath = normalizePath(folder);
         const filepath = normalizePath(`${folderPath}/${formattedTitle}.md`);
@@ -79,5 +106,24 @@ export class JekyllComposeCommands {
         if (!exists) {
             await this.app.vault.createFolder(normalizedPath);
         }
+    }
+
+    private async publishJekyllDraft(
+        file: TFile,
+        folder: string
+    ): Promise<void> {
+        const folderPath = normalizePath(folder);
+
+        await this.ensureFolderExists(folderPath);
+
+        const newFileName = moment().format("YYYY-MM-DD") + `-${file.name}`;
+        const newFilePath = normalizePath(`${folderPath}/${newFileName}`);
+        if (await this.app.vault.adapter.exists(newFilePath)) {
+            throw new Error(
+                `A post with the name "${newFileName}" already exists`
+            );
+        }
+
+        await this.app.vault.rename(file, newFilePath);
     }
 }
