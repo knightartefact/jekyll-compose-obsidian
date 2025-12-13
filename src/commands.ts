@@ -2,6 +2,7 @@ import { App, normalizePath, Notice, TFile, moment } from "obsidian";
 import JekyllComposePlugin from "./main";
 import { FileSelectionModal, UserInputModal } from "./modals";
 import * as changeCase from "change-case";
+import { generateDefaultFrontMatter } from "./utils";
 
 export class JekyllComposeCommands {
     constructor(private app: App) {}
@@ -115,8 +116,9 @@ export class JekyllComposeCommands {
         const file = await this.app.vault.create(filepath, "");
         await this.app.workspace.getLeaf(false).openFile(file);
         await this.app.fileManager.processFrontMatter(file, (frontMatter) => {
-                frontMatter.title = title.trim();
-                frontMatter.date = moment().format("YYYY-MM-DD HH:mm ZZ");
+            const defaultFrontMatter = generateDefaultFrontMatter();
+            Object.assign(frontMatter, defaultFrontMatter);
+            frontMatter.title = title.trim();
         });
         return file;
     }
