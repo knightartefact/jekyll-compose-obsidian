@@ -174,6 +174,11 @@ export class JekyllComposeCommands {
             );
         }
         await this.app.vault.rename(file, postFilePath);
+        await this.app.fileManager.processFrontMatter(file,
+            (frontMatter) => {
+                frontMatter.date = moment().format("YYYY-MM-DD HH:mm ZZ");
+            }
+        );
     }
 
     private async unpublishJekyllPost(
