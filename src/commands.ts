@@ -117,8 +117,7 @@ export class JekyllComposeCommands {
     ): Promise<void> {
         try {
             const date = moment().format("YYYY-MM-DD");
-            title = `${date}-${title.trim()}`;
-            await this.createJekyllFile(title, folder);
+            await this.createJekyllFile(title, folder, date);
             new Notice(`Post "${title}" created`);
         } catch (error) {
             new Notice(`Error creating post: ${error.message}`);
@@ -127,9 +126,13 @@ export class JekyllComposeCommands {
 
     private async createJekyllFile(
         title: string,
-        folder: string
+        folder: string,
+        date?: string
     ): Promise<TFile> {
-        const formattedTitle = changeCase.kebabCase(title.trim());
+        let formattedTitle = changeCase.kebabCase(title.trim());
+        if (date) {
+            formattedTitle = `${date}-${formattedTitle}`;
+        }
         const folderPath = normalizePath(folder);
         const filepath = normalizePath(`${folderPath}/${formattedTitle}.md`);
 
