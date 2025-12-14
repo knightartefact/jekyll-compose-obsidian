@@ -1,6 +1,6 @@
-# Jekyll Compose
+# Jekyll Compose for Obsidian
 
-A powerful Obsidian plugin that brings Jekyll blog post management directly into your vault. Create drafts, publish posts, and manage your Jekyll blog content seamlessly without leaving Obsidian.
+Manage your Jekyll blog directly from your Obsidian Vault. Create drafts, publish posts, and manage your Jekyll blog content seamlessly without leaving Obsidian.
 
 ## Features
 
