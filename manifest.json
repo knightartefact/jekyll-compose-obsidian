@@ -1,9 +1,9 @@
 {
-	"id": "jekyll-compose-obsidian",
+	"id": "jekyll-compose",
 	"name": "Jekyll Compose",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"minAppVersion": "1.10.0",
-	"description": "A jekyll-compose plugin for Obsidian.",
+	"description": "Manage your Jekyll site from your vault. Create, edit, and publish posts seamlessly.",
 	"author": "knightartefact",
 	"authorUrl": "https://stopaloff.com",
 	"fundingUrl": "",
