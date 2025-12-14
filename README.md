@@ -1,94 +1,153 @@
-# Obsidian Sample Plugin
+# Jekyll Compose
 
-This is a sample plugin for Obsidian (https://obsidian.md).
+A powerful Obsidian plugin that brings Jekyll blog post management directly into your vault. Create drafts, publish posts, and manage your Jekyll blog content seamlessly without leaving Obsidian.
 
-This project uses TypeScript to provide type checking and documentation.
-The repo depends on the latest plugin API (obsidian.d.ts) in TypeScript Definition format, which contains TSDoc comments describing what it does.
+## Features
 
-This sample plugin demonstrates some of the basic functionality the plugin API can do.
-- Adds a ribbon icon, which shows a Notice when clicked.
-- Adds a command "Open Sample Modal" which opens a Modal.
-- Adds a plugin setting tab to the settings page.
-- Registers a global click event and output 'click' to the console.
-- Registers a global interval which logs 'setInterval' to the console.
+- **Create Jekyll drafts** with automatic front matter generation
+- **Create Jekyll posts** with date-prefixed filenames
+- **Publish drafts** to posts with proper date formatting
+- **Unpublish posts** back to drafts
+- **Customizable folder structure** for posts and drafts
+- **Auto-formatted filenames** using kebab-case
+- **Deafult frontmatter** including the title, date, and more
 
-## First time developing plugins?
+## Coming Soon Features
+- **Template support** for consistent front matter
 
-Quick starting guide for new plugin devs:
+## Usage
 
-- Check if [someone already developed a plugin for what you want](https://obsidian.md/plugins)! There might be an existing plugin similar enough that you can partner up with.
-- Make a copy of this repo as a template with the "Use this template" button (login to GitHub if you don't see it).
-- Clone your repo to a local development folder. For convenience, you can place this folder in your `.obsidian/plugins/your-plugin-name` folder.
-- Install NodeJS, then run `npm i` in the command line under your repo folder.
-- Run `npm run dev` to compile your plugin from `main.ts` to `main.js`.
-- Make changes to `main.ts` (or create new `.ts` files). Those changes should be automatically compiled into `main.js`.
-- Reload Obsidian to load the new version of your plugin.
-- Enable plugin in settings window.
-- For updates to the Obsidian API run `npm update` in the command line under your repo folder.
+The plugin adds four commands to Obsidian's command palette. Simply open the command palette to start using the jekyll compose commands:
 
-## Releasing new releases
+| Command | Description |
+|---------|-------------|
+| **Create draft** | Creates a new Jekyll draft in your drafts folder. Opens a prompt for the title. |
+| **Create post** | Creates a new Jekyll post in your posts folder with today's date. Opens a prompt for the title. |
+| **Publish draft** | Converts a draft to a published post by adding a date prefix and moving it to the posts folder. |
+| **Unpublish post** | Moves a post back to drafts by removing the date prefix. |
 
-- Update your `manifest.json` with your new version number, such as `1.0.1`, and the minimum Obsidian version required for your latest release.
-- Update your `versions.json` file with `"new-plugin-version": "minimum-obsidian-version"` so older versions of Obsidian can download an older version of your plugin that's compatible.
-- Create new GitHub release using your new version number as the "Tag version". Use the exact version number, don't include a prefix `v`. See here for an example: https://github.com/obsidianmd/obsidian-sample-plugin/releases
-- Upload the files `manifest.json`, `main.js`, `styles.css` as binary attachments. Note: The manifest.json file must be in two places, first the root path of your repository and also in the release.
-- Publish the release.
+### Examples
 
-> You can simplify the version bump process by running `npm version patch`, `npm version minor` or `npm version major` after updating `minAppVersion` manually in `manifest.json`.
-> The command will bump version in `manifest.json` and `package.json`, and add the entry for the new version to `versions.json`
+- **Drafts**: Created as `my-post-title.md` in the drafts folder
+- **Posts**: Created as `YYYY-MM-DD-my-post-title.md` in the posts folder
+- **Auto-format**: Titles are automatically converted to kebab-case for filenames
+- **Front matter**: Automatically generated
 
-## Adding your plugin to the community plugin list
+## Installation
 
-- Check the [plugin guidelines](https://docs.obsidian.md/Plugins/Releasing/Plugin+guidelines).
-- Publish an initial version.
-- Make sure you have a `README.md` file in the root of your repo.
-- Make a pull request at https://github.com/obsidianmd/obsidian-releases to add your plugin.
+### From Obsidian Community Plugins (Coming Soon)
 
-## How to use
+1. Open **Settings → Community plugins**
+2. Select **Browse** and search for "Jekyll Compose"
+3. Select **Install** then **Enable**
 
-- Clone this repo.
-- Make sure your NodeJS is at least v16 (`node --version`).
-- `npm i` or `yarn` to install dependencies.
-- `npm run dev` to start compilation in watch mode.
+### Manual Installation
 
-## Manually installing the plugin
+1. Download the latest release from the [releases page](https://github.com/knightartefact/jekyll-compose-obsidian/releases)
+2. Extract the files to your vault's plugins folder: `<vault>/.obsidian/plugins/jekyll-compose-obsidian/`
+3. Reload Obsidian
+4. Enable the plugin in **Settings → Community plugins**
 
-- Copy over `main.js`, `styles.css`, `manifest.json` to your vault `VaultFolder/.obsidian/plugins/your-plugin-id/`.
+## Configuration
 
-## Improve code quality with eslint (optional)
-- [ESLint](https://eslint.org/) is a tool that analyzes your code to quickly find problems. You can run ESLint against your plugin to find common bugs and ways to improve your code. 
-- To use eslint with this project, make sure to install eslint from terminal:
-  - `npm install -g eslint`
-- To use eslint to analyze this project use this command:
-  - `eslint main.ts`
-  - eslint will then create a report with suggestions for code improvement by file and line number.
-- If your source code is in a folder, such as `src`, you can use eslint with this command to analyze all files in that folder:
-  - `eslint ./src/`
+Configure the plugin in **Settings → Jekyll Compose**:
 
-## Funding URL
+### Posts Folder
+- **Default**: `_posts`
+- Folder where Jekyll posts will be created. Set this to match your Jekyll blog's posts directory
 
-You can include funding URLs where people who use your plugin can financially support it.
+### Drafts Folder
+- **Default**: `_drafts`
+- Folder where Jekyll drafts will be created. Set this to match your Jekyll blog's drafts directory
 
-The simple way is to set the `fundingUrl` field to your link in your `manifest.json` file:
+### Default Template File
+- **Default**: (empty)
+- Path to a markdown file to use as a template for new posts and drafts
+- Leave empty to use default front matter generation
+- Use autocomplete suggestions to select from your template folder
 
-```json
-{
-    "fundingUrl": "https://buymeacoffee.com"
-}
+### Default Template Folder
+- **Default**: (empty)
+- Folder to select template files from
+- Makes it easier to find templates when using the template file picker
+
+### Default Date-Time Format
+- **Default**: `YYYY-MM-DD HH:mm ZZ`
+- Format string for date-time in Jekyll front matter
+- Uses [Moment.js formatting](https://momentjs.com/docs/#/displaying/format/)
+- Examples:
+  - `YYYY-MM-DD HH:mm ZZ` → `2025-12-14 15:30 +00:00`
+  - `YYYY-MM-DD` → `2025-12-14`
+  - `MMMM DD, YYYY` → `December 14, 2025`
+
+## Workflow Example
+
+### Creating a new blog post
+
+1. Open the command palette (Ctrl/Cmd + P)
+2. Select **Jekyll Compose: Create draft**
+3. Enter your post title (e.g., "My Amazing Blog Post")
+4. The plugin creates `_drafts/my-amazing-blog-post.md` with front matter
+5. Write your content
+6. When ready to publish, select **Jekyll Compose: Publish draft**
+7. Select your draft from the list
+8. The file is moved to `_posts/2025-12-14-my-amazing-blog-post.md`
+
+### Starting with a published post
+
+1. Select **Jekyll Compose: Create post**
+2. Enter your title
+3. File is created directly in `_posts` with today's date
+
+### Moving posts back to drafts
+
+1. Select **Jekyll Compose: Unpublish post**
+2. Choose the post to unpublish
+3. Date prefix is removed and file moves to `_drafts`
+
+## Requirements
+
+- Obsidian v1.10.0 or higher
+- Desktop only (not compatible with mobile)
+
+## Compatibility
+
+This plugin is designed to work with standard Jekyll blog structures. It follows Jekyll conventions:
+- Posts in `_posts/` with `YYYY-MM-DD-title.md` format
+- Drafts in `_drafts/` without date prefixes
+- Front matter in YAML format
+
+## Support
+
+If you encounter any issues or have feature requests, please [open an issue](https://github.com/knightartefact/jekyll-compose-obsidian/issues) on GitHub.
+
+## Development
+
+### Building the plugin
+
+```bash
+npm install
+npm run dev      # Watch mode for development
+npm run build    # Production build
 ```
 
-If you have multiple URLs, you can also do:
+### Testing locally
 
-```json
-{
-    "fundingUrl": {
-        "Buy Me a Coffee": "https://buymeacoffee.com",
-        "GitHub Sponsor": "https://github.com/sponsors",
-        "Patreon": "https://www.patreon.com/"
-    }
-}
-```
+1. Clone this repository to your vault's plugins folder
+2. Run `npm install` then `npm run dev`
+3. Reload Obsidian
+4. Enable the plugin in settings
 
-## API Documentation
+## License
 
-See https://github.com/obsidianmd/obsidian-api
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Credits
+
+Created by [knightartefact](https://stopaloff.com)
+
+Inspired by the [jekyll-compose](https://github.com/jekyll/jekyll-compose) gem for Jekyll.
+
+---
+
+**Note**: This plugin modifies files in your vault. Always back up your content before using any file management plugin.
