@@ -2,10 +2,10 @@
 	"id": "jekyll-compose-obsidian",
 	"name": "Jekyll Compose",
 	"version": "1.0.0",
-	"minAppVersion": "0.15.0",
+	"minAppVersion": "1.10.0",
 	"description": "A jekyll-compose plugin for Obsidian.",
 	"author": "knightartefact",
 	"authorUrl": "https://stopaloff.com",
 	"fundingUrl": "",
-	"isDesktopOnly": false
+	"isDesktopOnly": true
 }
