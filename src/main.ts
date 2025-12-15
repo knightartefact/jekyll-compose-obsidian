@@ -1,6 +1,5 @@
-import { Notice, Plugin } from "obsidian";
+import { Plugin } from "obsidian";
 import { JekyllComposeSettings, JekyllComposeSettingTab, DEFAULT_SETTINGS } from "./settings";
-import { UserInputModal } from "./modals";
 import { JekyllComposeCommands } from "./commands";
 
 export default class JekyllComposePlugin extends Plugin {
