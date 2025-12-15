@@ -16,8 +16,8 @@ export class JekyllComposeCommands {
                     plugin.app,
                     "Enter title",
                     "Title cannot be empty",
-                    (title: string) => {
-                        this.createJekyllDraft(
+                    async (title: string) => {
+                        await this.createJekyllDraft(
                             title,
                             plugin.settings.draftsFolder
                         );
@@ -34,8 +34,8 @@ export class JekyllComposeCommands {
                     plugin.app,
                     "Enter title",
                     "Title cannot be empty",
-                    (title: string) => {
-                        this.createJekyllPost(
+                    async (title: string) => {
+                        await this.createJekyllPost(
                             title,
                             plugin.settings.postsFolder
                         );
@@ -177,11 +177,9 @@ export class JekyllComposeCommands {
             );
         }
         await this.app.vault.rename(file, postFilePath);
-        await this.app.fileManager.processFrontMatter(file,
-            (frontMatter) => {
-                frontMatter.date = moment().format("YYYY-MM-DD HH:mm ZZ");
-            }
-        );
+        await this.app.fileManager.processFrontMatter(file, (frontMatter) => {
+            frontMatter.date = moment().format("YYYY-MM-DD HH:mm ZZ");
+        });
     }
 
     private async unpublishJekyllPost(
