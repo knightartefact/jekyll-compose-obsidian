@@ -1,6 +1,6 @@
 import { moment } from "obsidian";
 
-export function generateDefaultFrontMatter(): Record<string, any> {
+export function generateDefaultFrontMatter(): Record<string, string | string[]> {
     return {
         layout: "post",
         title: "",
