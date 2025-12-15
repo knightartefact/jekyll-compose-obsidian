@@ -101,7 +101,6 @@ export class JekyllComposeSettingTab extends PluginSettingTab {
         const { containerEl } = this;
         containerEl.empty();
 
-        containerEl.createEl("h2", { text: "Jekyll Compose Settings" });
         new Setting(containerEl)
             .setName("Posts Folder")
             .setDesc("Folder where Jekyll posts will be created.")
