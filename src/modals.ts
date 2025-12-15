@@ -57,7 +57,7 @@ export class UserInputModal extends SuggestModal<string> {
     }
 
     selectSuggestion(value: string, evt: MouseEvent | KeyboardEvent): void {
-        const input = (this as any).inputEl?.value?.trim();
+        const input = value.trim();
         if (!input) {
             new Notice("Please enter a title");
             this.close();
