@@ -102,7 +102,7 @@ export class JekyllComposeSettingTab extends PluginSettingTab {
         containerEl.empty();
 
         new Setting(containerEl)
-            .setName("Posts Folder")
+            .setName("Posts folder")
             .setDesc("Folder where Jekyll posts will be created.")
             .addText((text) =>
                 text
@@ -115,7 +115,7 @@ export class JekyllComposeSettingTab extends PluginSettingTab {
             );
 
         new Setting(containerEl)
-            .setName("Drafts Folder")
+            .setName("Drafts folder")
             .setDesc("Folder where Jekyll drafts will be created.")
             .addText((text) =>
                 text
@@ -128,7 +128,7 @@ export class JekyllComposeSettingTab extends PluginSettingTab {
             );
 
         new Setting(containerEl)
-            .setName("Default Template File")
+            .setName("Default template File")
             .setDesc(
                 "Filepath to a markdown file to use as a template for new posts and drafts. Leave empty for no template."
             )
@@ -147,7 +147,7 @@ export class JekyllComposeSettingTab extends PluginSettingTab {
             });
 
         new Setting(containerEl)
-            .setName("Default Template Folder")
+            .setName("Default template folder")
             .setDesc(
                 "Folder to select template files from when choosing a template for new posts and drafts."
             )
@@ -167,7 +167,7 @@ export class JekyllComposeSettingTab extends PluginSettingTab {
             });
 
         new Setting(containerEl)
-            .setName("Default Date-Time Format")
+            .setName("Default date-time format")
             .setDesc("Default format for date-time in Jekyll front matter.")
             .addText((text) => {
                 text.setPlaceholder(DEFAULT_SETTINGS.dateTimeFormat)
