@@ -19,7 +19,8 @@ export class JekyllComposeCommands {
                     async (title: string) => {
                         await this.createJekyllDraft(
                             title,
-                            plugin.settings.draftsFolder
+                            plugin.settings.draftsFolder,
+                            plugin.settings.templateFile
                         );
                     }
                 ).open();
@@ -37,7 +38,8 @@ export class JekyllComposeCommands {
                     async (title: string) => {
                         await this.createJekyllPost(
                             title,
-                            plugin.settings.postsFolder
+                            plugin.settings.postsFolder,
+                            plugin.settings.templateFile
                         );
                     }
                 ).open();
@@ -101,10 +103,11 @@ export class JekyllComposeCommands {
 
     private async createJekyllDraft(
         title: string,
-        folder: string
+        folder: string,
+        templatePath?: string
     ): Promise<void> {
         try {
-            await this.createJekyllFile(title, folder);
+            await this.createJekyllFile(title, folder, undefined, templatePath);
             new Notice(`Draft "${title}" created`);
         } catch (error) {
             new Notice(`Error creating draft: ${error.message}`);
@@ -113,11 +116,12 @@ export class JekyllComposeCommands {
 
     private async createJekyllPost(
         title: string,
-        folder: string
+        folder: string,
+        templatePath?: string
     ): Promise<void> {
         try {
             const date = moment().format("YYYY-MM-DD");
-            await this.createJekyllFile(title, folder, date);
+            await this.createJekyllFile(title, folder, date, templatePath);
             new Notice(`Post "${title}" created`);
         } catch (error) {
             new Notice(`Error creating post: ${error.message}`);
@@ -127,7 +131,8 @@ export class JekyllComposeCommands {
     private async createJekyllFile(
         title: string,
         folder: string,
-        date?: string
+        date?: string,
+        templatePath?: string
     ): Promise<TFile> {
         let formattedTitle = changeCase.kebabCase(title.trim());
         if (date) {
@@ -141,11 +146,22 @@ export class JekyllComposeCommands {
         if (await this.app.vault.adapter.exists(filepath)) {
             throw new Error(`"${formattedTitle}" already exists`);
         }
-        // For later render template of the file for the front matter
-        const file = await this.app.vault.create(filepath, "");
+        let initialContent = "";
+        if (templatePath) {
+            const templateFile = this.app.vault.getAbstractFileByPath(normalizePath(templatePath));
+            if (templateFile instanceof TFile) {
+                initialContent = await this.app.vault.read(templateFile);
+            } else {
+                new Notice(`Template file not found: ${templatePath}`);
+            }
+        }
+
+        const file = await this.app.vault.create(filepath, initialContent);
         await this.app.fileManager.processFrontMatter(file, (frontMatter) => {
-            const defaultFrontMatter = generateDefaultFrontMatter();
-            Object.assign(frontMatter, defaultFrontMatter);
+            if (!templatePath) {
+                const defaultFrontMatter = generateDefaultFrontMatter();
+                Object.assign(frontMatter, defaultFrontMatter);
+            }
             frontMatter.title = title.trim();
         });
         await this.app.workspace.getLeaf(false).openFile(file);
